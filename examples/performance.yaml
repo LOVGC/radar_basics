@@ -1,0 +1,20 @@
+mode: performance
+seed: 11
+radar:
+  carrier_frequency_hz: 10000000000.0
+  range_resolution_m: 7.5
+  max_unambiguous_range_m: 15000.0
+  velocity_resolution_mps: 2.0
+  max_unambiguous_velocity_mps: 35.0
+  tx_3db_beamwidth_deg: 12.0
+  detection_range_m: 8000.0
+  reference_rcs_m2: 1.0
+noise:
+  noise_figure_db: 5.0
+  system_loss_db: 1.5
+scene:
+  targets:
+    - range_m: 6200.0
+      azimuth_deg: 0.0
+      radial_velocity_mps: 18.0
+      rcs_m2: 1.0
