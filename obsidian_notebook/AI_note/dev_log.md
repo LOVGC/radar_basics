@@ -4,6 +4,30 @@ This is a living development document for the `radar_basics` simulation project.
 
 ---
 
+## 2026-04-28 — Concise Summary
+
+Today we built the first usable version of the radar simulation learning framework.
+
+Completed:
+- Implemented the V1 waveform-level 2D phased-array radar simulator.
+- Added the end-to-end chain: truth -> dwell -> raw IQ -> range/Doppler/angle processing -> detections -> tracks -> display.
+- Added example config: `example_configs/architecture.yaml`.
+- Added tests for config, signal synthesis, processing, detection, tracking, and display helpers.
+- Added human-facing docs in `HUMAN.md`.
+- Added tutorial notebook: `learning/phased_array_radar_simulation_tutorial.ipynb`.
+- Refined the notebook's signal-model explanation, including variable types, index meanings, and Doppler phase notation.
+- Removed the Mermaid diagram after it proved less clear than the formula/table explanation.
+
+Verified:
+- `uv run pytest` passes with `13 passed`.
+- The example simulation produces 18 dwell tasks, 18 detections, and 1 confirmed track.
+
+Current state:
+- V1 is ready as an educational waveform-level simulator.
+- The next valuable work is improving detection toward CFAR, adding clutter, and expanding the tutorial from ideal point targets toward more realistic radar effects.
+
+---
+
 ## 2026-04-28 — V1 waveform-level architecture implemented
 
 ### Original Goal
