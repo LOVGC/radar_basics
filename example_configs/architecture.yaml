@@ -1,25 +1,53 @@
-mode: architecture
-seed: 7
 radar:
   carrier_frequency_hz: 10000000000.0
-  num_elements: 8
-  steering_azimuth_deg: 0.0
-  chirp_bandwidth_hz: 20000000.0
-  pulse_width_s: 0.000005
-  pri_s: 0.0001
-  num_pulses: 32
-  sample_rate_hz: 40000000.0
-  peak_tx_power_w: 1000.0
-noise:
-  noise_figure_db: 4.0
-  system_loss_db: 2.0
+  peak_tx_power_w: 50000.0
+  noise_figure_db: 0.0
+  system_loss_db: 0.0
+  temperature_k: 0.0
+
+array:
+  num_y: 4
+  num_x: 4
+
+waveform:
+  bandwidth_hz: 5000000.0
+  pulse_width_s: 0.000002
+  prf_hz: 10000.0
+  num_pulses: 16
+  sample_rate_hz: 10000000.0
+
+scan:
+  azimuths_deg: [-10.0, 0.0, 10.0]
+  elevations_deg: [-5.0, 0.0, 5.0]
+  mode: search
+
 scene:
   targets:
-    - range_m: 5000.0
-      azimuth_deg: 4.0
-      radial_velocity_mps: 35.0
-      rcs_m2: 1.0
-    - range_m: 8200.0
-      azimuth_deg: -7.5
-      radial_velocity_mps: -20.0
-      rcs_m2: 3.0
+    - name: target-a
+      range_m: 1500.0
+      az_deg: 0.0
+      el_deg: 0.0
+      radial_velocity_mps: 0.0
+      rcs_m2: 10.0
+
+processing:
+  angle_grid:
+    azimuths_deg: [-10.0, -5.0, 0.0, 5.0, 10.0]
+    elevations_deg: [-5.0, 0.0, 5.0]
+  detector:
+    method: threshold
+    threshold_snr_db: 12.0
+    max_detections_per_dwell: 1
+    guard_cells: [2, 1, 1, 1]
+  tracker:
+    association_gate_m: 1000.0
+    confirmation_hits: 2
+    max_misses: 3
+    process_noise_mps2: 20.0
+    measurement_noise_m: 75.0
+
+run:
+  num_scan_cycles: 2
+  seed: 7
+  store_raw: false
+

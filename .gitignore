@@ -1,1 +1,3 @@
 obsidian_notebook/.obsidian/
+__pycache__/
+*.py[cod]
