@@ -2,7 +2,12 @@
 # 2026-04-28
 
 plan:
-- 通过 coding 把基本的 matched filtering, doppler processing, digital beamforming 还有常用 filtering 的技术学习一下。 
+- 通过 coding 把基本的 matched filtering, doppler processing, digital beamforming 还有常用 filtering 的技术学习一下。
+
+
+what I learned today：
+- 这个 YAML 做得好，基本上就是在概念上描述了一个雷达，方便人类理解。
+- obsidian 中是可以直接插入 Mermaid 的图的，这意味着，可以让 AI 在 md 里面生成这种 mermaid 图让人类更容易理解。
 
 # 2026-04-27
 
