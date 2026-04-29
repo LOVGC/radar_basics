@@ -1,3 +1,28 @@
+# 2026-04-29
+
+plan:
+继续学习 basic radar signal processing
+
+what I learn today:
+- 今天这个学习方法有点意思，i.e. learn a codebase with AI
+	- 就是说，目的是学习和理解一个 codebase, 对这个 codebase 建立一个 Mental model (或者说，人类学习任何东西，基本上都是在对这个东西建立一个自己能理解的 Mental model, 这个建立过程，最高效，最直接的方式，就是与这个东西进行 interation。 如果这个东西是个 codebase, 那么这个 interation 就更直接了，你可以直接上手去实验，然后验证自己的理解。)
+	- 学习方法是：
+		- 把这个复杂的 codebase 先分析其 overall architecture, 然后看看这个 code base 想要 implement 的 concept 是啥，建立一个对这个 code base 的 mental model (mental model 这个概念其实就是，你该怎么去想这个东西). 这个活是让 AI 来干的。
+		- 然后让 AI plan 一个教学计划：
+			- 这时候，其实可以用 plan.md 那个 idea 了，因为这个 plan 可能会随着学习者的实际的学习进度而改变。所以 plan.md 就因该是一个 Living document。AI 应该在与学习者互动的过程中，不断地去更新这个 plan.md 来修改学习计划。
+		- 整个学习过程应该是这样的：AI 按照一开始的教学计划把教学内容给一点一点地呈现给学习者。
+			- for each section in the tutorial plan:
+				- show the content
+				- 学习者会阅读并且尝试理解这个内容，这时候，学习者会追问一些问题.
+				- 然后 AI 回答这些问题。
+				- 最后，学习者主动总结一下自己对这个 section 的理解。如果 AI 觉得这个理解基本正确，就可以进行下一个 secction 的学习了；如果 AI 觉得这个理解不太对，就要指出来。
+	- 我目前还没有 implement 这个 plan.md, 就只是用一个 session 来学习。不过这个学习系统可以探索探索，说不定，在教培机构已经有人这么做了。
+
+
+技巧 Learned:
+![[Pasted image 20260429112243.png]]
+- 想要看某个函数的定义，可以用这个 peek
+- 也可以直接 go to definition
 
 # 2026-04-28
 
