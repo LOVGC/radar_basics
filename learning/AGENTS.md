@@ -76,8 +76,8 @@ learning/learn_coding_myself.ipynb
 Current status:
 
 ```text
-Completed through Step 5A.
-Step 5B Doppler Processing has been added and is ready for learner review.
+Completed through Step 5B.
+Step 5C Angle Beamforming has been added and is ready for learner review.
 ```
 
 Recent additions:
@@ -89,6 +89,18 @@ Recent additions:
   - pulse/range compressed complex IQ;
   - compressed magnitude peak.
 - Step 5B introduces Doppler processing along the pulse / slow-time dimension.
+- Step 5B now includes:
+  - single-target raw IQ signal model connecting fast-time delay, slow-time phase rotation, and array-space phase pattern;
+  - compact mathematical mental model for Doppler velocity estimation from slow-time phase slope;
+  - line-by-line explanation of `doppler_process()`;
+  - Doppler-bin table with frequency, radial velocity, and magnitude;
+  - current stationary-target Doppler plot;
+  - toy nonzero-velocity slow-time signal and Doppler plot.
+- Step 5C introduces angle beamforming from the full signal model:
+  - raw IQ model -> range-focused model -> Doppler-focused model -> array snapshot model;
+  - `beamform_angle_grid()` line-by-line code mapping;
+  - array snapshot magnitude/phase and steering-vector phase plots;
+  - azimuth/elevation beamforming response plots.
 
 ## Learner's Current Understanding
 
@@ -103,6 +115,7 @@ YAML spec
 -> raw IQ data
 -> range compression
 -> Doppler processing
+-> angle beamforming
 ```
 
 Key mental models established:
@@ -163,26 +176,27 @@ It does not estimate velocity or angle yet.
 Next teaching target:
 
 ```text
-Step 5B: Doppler Processing
+Step 5C: Angle Beamforming
 ```
 
 Focus:
 
-- Explain why Doppler processing operates along the pulse / slow-time dimension.
-- Connect pulse-to-pulse phase progression to radial velocity.
-- Show that `doppler_process(range_data, radar)` transforms:
+- Explain why angle beamforming operates along the array dimensions.
+- Connect array-space phase pattern to target direction.
+- Explain how the full signal model reduces to:
 
   ```text
-  range_data shape = (array_y, array_x, pulse, range_bin)
+  Z_m[R, f_D] ≈ C_RD * a_m(u)
   ```
 
-  into:
+- Show that `beamform_angle_grid(doppler_data, radar, azimuths_deg, elevations_deg)` transforms:
 
   ```text
   doppler_data shape = (array_y, array_x, range_bin, doppler_bin)
+  -> cube_data shape = (range_bin, doppler_bin, az_index, el_index)
   ```
 
-- Help the learner understand why the example target with `radial_velocity_mps = 0.0` lands near the 0 m/s Doppler bin.
+- Help the learner understand why the example target at azimuth/elevation `(0.0, 0.0)` peaks at the center of the configured angle grid.
 
 ## Teaching Rules
 
@@ -199,5 +213,5 @@ Focus:
 ## Assumptions
 
 - `learning/AGENTS.md` is meant to be maintained as a living learning-state file.
-- Current progress should be treated as Step 5A understood, Step 5B added but not yet learner-confirmed.
-- The next teaching interaction should begin from Doppler processing, not restart from YAML/config.
+- Current progress should be treated as Step 5B understood enough to proceed, Step 5C added but not yet learner-confirmed.
+- The next teaching interaction should begin from angle beamforming, not restart from YAML/config.
