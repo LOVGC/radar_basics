@@ -3,7 +3,27 @@
 plan:
 继续学习 basic radar signal processing
 
+
+---
+
+
 what I learn today:
+
+总结一下今天的 workflow:
+- step by step， interactive 的 learning 方式: 
+	- 先给 AI 充足的 contexts, 然后让 AI 给出一个 study plan。
+	- AI 讲一部分代码，我来自己进行理解和验证，然后 Build 一个对这部分代码的 mental model, 然后我自己总结自己的理解。-> repeat for next step. 
+	- 在学习了几个 steps 之后，可以总结一个更大的 mental model。
+	- 理想情况下是，
+		- 在学习完后，我应该有一个比较好的 mental model for the whole codebase.
+		- 而且还要把这个 Mental model 给总结成文字，图片，保存下来，用以回顾。
+
+
+今天体会一个有趣的地方是：
+- 学习一个东西，最好是 try to understand it. 这里其实就是 Build 一个 mental model for 这个东西。
+	- mental model 其实就是：你该怎么去想这个东西才能有效。怎么检验你的 Mental model 是否有效？其实就是 test against reality。就是看看你的 mental model 是不是能够大多数情况下正确 predict what will happen in reality。也可以把这个东西理解成目前 AI 领域比较火的 world model 这个概念。其实也跟 model depended reality 也相关。也跟我之前博士阶段学的 modeling complex system 那些东西也相关。跟之前学习过的各种各样的 math model 也相关。嗯，可能这些东西确实都是指的一种东西吧：就是每一种不同的 model 可能都是一个象，是同一个东西的一个侧面，这个象一般来讲是跟具体任务有关的，你任务不同，你最后给出的模型应该就不会一样。
+
+
 - 今天这个学习方法有点意思，i.e. learn a codebase with AI
 	- 就是说，目的是学习和理解一个 codebase, 对这个 codebase 建立一个 Mental model (或者说，人类学习任何东西，基本上都是在对这个东西建立一个自己能理解的 Mental model, 这个建立过程，最高效，最直接的方式，就是与这个东西进行 interation。 如果这个东西是个 codebase, 那么这个 interation 就更直接了，你可以直接上手去实验，然后验证自己的理解。)
 	- 学习方法是：
@@ -23,6 +43,10 @@ what I learn today:
 ![[Pasted image 20260429112243.png]]
 - 想要看某个函数的定义，可以用这个 peek
 - 也可以直接 go to definition
+
+---
+
+next: step 5 A
 
 # 2026-04-28
 
