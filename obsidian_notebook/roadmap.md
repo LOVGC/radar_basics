@@ -1,3 +1,8 @@
+# 2026-05-06
+
+plan:
+- radar basic signal processing 
+
 # 2026-04-29
 
 plan:

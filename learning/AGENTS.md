@@ -76,8 +76,10 @@ learning/learn_coding_myself.ipynb
 Current status:
 
 ```text
-Completed through Step 5B.
-Step 5C Angle Beamforming has been added and is ready for learner review.
+Completed through Step 5C.
+Step 5C Angle Beamforming has been reviewed and wrapped up by the learner.
+Step 6 Detection has been added and is ready for learner review.
+Tutorial example target has been changed to azimuth 5 deg, elevation 3 deg, radial velocity +10 m/s.
 ```
 
 Recent additions:
@@ -94,13 +96,23 @@ Recent additions:
   - compact mathematical mental model for Doppler velocity estimation from slow-time phase slope;
   - line-by-line explanation of `doppler_process()`;
   - Doppler-bin table with frequency, radial velocity, and magnitude;
-  - current stationary-target Doppler plot;
+  - current moving-target Doppler plot;
   - toy nonzero-velocity slow-time signal and Doppler plot.
 - Step 5C introduces angle beamforming from the full signal model:
   - raw IQ model -> range-focused model -> Doppler-focused model -> array snapshot model;
   - `beamform_angle_grid()` line-by-line code mapping;
-  - array snapshot magnitude/phase and steering-vector phase plots;
+  - array snapshot magnitude/phase plots, with clarification that magnitude may stay nearly flat while phase carries angle information;
+  - off-boresight steering-vector phase demo to make the spatial phase ramp visible;
   - azimuth/elevation beamforming response plots.
+- Step 5C was wrapped up with the learner's higher-level understanding that the simple radar signal model makes range, Doppler, and angle processing approximately separable and computationally practical.
+- A Step 5C wrap-up markdown cell was appended to `learning/learn_coding_myself.ipynb`, organizing the learner's understanding of signal-model assumptions, separability, and why staged template matching is computationally practical.
+- Step 6 introduces detection on the processed radar cube:
+  - `RadarCube` construction from `cube_data` and physical axes;
+  - `detect_radar_cube()` output as structured `Detection` objects;
+  - manual dissection of power cube, background power, threshold power, candidate cells, and index-to-axis conversion;
+  - explanation of `guard_cells` as simple non-maximum suppression around accepted detections.
+  - note that the current zero-noise config can make threshold candidates numerous because the median background estimate is tiny.
+  - detection visualization plots for range-Doppler power, angle power, candidate mask, and sorted power distribution.
 
 ## Learner's Current Understanding
 
@@ -145,6 +157,40 @@ Key mental models established:
   fast-time        -> range / delay
   ```
 
+- The learner has formed a higher-level template-matching mental model:
+
+  ```text
+  matched filtering, Doppler processing, and beamforming are all inner-product projections.
+  The measurement is compared against a family of known templates.
+  The matching template gives a large coherent sum; mismatched templates tend to cancel or be suppressed.
+  ```
+
+- The learner now understands the core signal-processing pipeline as relying on an approximately separable signal model:
+
+  ```text
+  fast-time structure       -> range / delay
+  pulse slow-time structure -> Doppler / radial velocity
+  array-channel structure   -> angle / spatial phase
+  ```
+
+  This separability is what makes the engineering problem tractable: instead of matching over one large joint range-velocity-angle template space, the code can do smaller projections along fast-time, slow-time, and array dimensions.
+
+- Important nuance to preserve in future teaching:
+
+  ```text
+  The dimensions are not absolutely independent in all radar regimes.
+  The tutorial is using a simplified model where the coupling is small enough to process range, Doppler, and angle in stages.
+  ```
+
+- Signal-model assumptions the learner has identified or partially identified:
+
+  ```text
+  far-field / plane-wave approximation across the array
+  narrowband spatial array model
+  point-target style scatterer model
+  limited motion over one CPI, so target energy mostly stays in one range/Doppler neighborhood
+  ```
+
 ## Range Compression Understanding
 
 The learner's current understanding:
@@ -171,32 +217,36 @@ for each array element:
 
 It does not estimate velocity or angle yet.
 
+## Angle Beamforming Understanding
+
+The learner's current understanding:
+
+```text
+After beamforming, cube_data has shape:
+
+(range, doppler, az, el)
+
+For a fixed range bin and Doppler bin, the az/el slice is an angle response map.
+If a target is present in that range-Doppler cell, the peak magnitude/power over az/el indicates the likely target direction.
+If no target is present in that range-Doppler cell, the az/el slice may still contain noise or sidelobes, but should not show a strong reliable peak above the detection threshold.
+```
+
 ## Next Step
 
 Next teaching target:
 
 ```text
-Step 5C: Angle Beamforming
+Step 6: Detection
 ```
 
 Focus:
 
-- Explain why angle beamforming operates along the array dimensions.
-- Connect array-space phase pattern to target direction.
-- Explain how the full signal model reduces to:
-
-  ```text
-  Z_m[R, f_D] ≈ C_RD * a_m(u)
-  ```
-
-- Show that `beamform_angle_grid(doppler_data, radar, azimuths_deg, elevations_deg)` transforms:
-
-  ```text
-  doppler_data shape = (array_y, array_x, range_bin, doppler_bin)
-  -> cube_data shape = (range_bin, doppler_bin, az_index, el_index)
-  ```
-
-- Help the learner understand why the example target at azimuth/elevation `(0.0, 0.0)` peaks at the center of the configured angle grid.
+- Review the newly added Step 6 cells with the learner.
+- Explain that detection operates on the processed radar cube after range, Doppler, and angle processing.
+- Connect detection to thresholding / finding significant peaks in radar-cube power.
+- Show how a cube index becomes a measurement with range, radial velocity, azimuth, and elevation axes.
+- Explain false alarms, noise/sidelobes, guard cells, and why a peak needs a threshold rather than just local maximum selection.
+- Use the new visualization cells to distinguish candidate cells from accepted detections.
 
 ## Teaching Rules
 
@@ -213,5 +263,5 @@ Focus:
 ## Assumptions
 
 - `learning/AGENTS.md` is meant to be maintained as a living learning-state file.
-- Current progress should be treated as Step 5B understood enough to proceed, Step 5C added but not yet learner-confirmed.
-- The next teaching interaction should begin from angle beamforming, not restart from YAML/config.
+- Current progress should be treated as Step 5C understood enough to proceed; Step 6 has been added but not yet learner-confirmed.
+- The next teaching interaction should review detection, not restart from YAML/config or angle beamforming.
