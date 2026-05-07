@@ -76,9 +76,10 @@ learning/learn_coding_myself.ipynb
 Current status:
 
 ```text
-Completed through Step 5C.
+Completed through Step 6.
 Step 5C Angle Beamforming has been reviewed and wrapped up by the learner.
-Step 6 Detection has been added and is ready for learner review.
+Step 6 Detection has been reviewed and wrapped up by the learner.
+Step 7 Full experiment + tracking has been added and is ready for learner review.
 Tutorial example target has been changed to azimuth 5 deg, elevation 3 deg, radial velocity +10 m/s.
 ```
 
@@ -107,12 +108,22 @@ Recent additions:
 - Step 5C was wrapped up with the learner's higher-level understanding that the simple radar signal model makes range, Doppler, and angle processing approximately separable and computationally practical.
 - A Step 5C wrap-up markdown cell was appended to `learning/learn_coding_myself.ipynb`, organizing the learner's understanding of signal-model assumptions, separability, and why staged template matching is computationally practical.
 - Step 6 introduces detection on the processed radar cube:
+  - intro recap summarizing the pipeline before detection: config -> raw IQ -> range compression -> Doppler processing -> angle beamforming -> radar cube;
   - `RadarCube` construction from `cube_data` and physical axes;
   - `detect_radar_cube()` output as structured `Detection` objects;
   - manual dissection of power cube, background power, threshold power, candidate cells, and index-to-axis conversion;
   - explanation of `guard_cells` as simple non-maximum suppression around accepted detections.
   - note that the current zero-noise config can make threshold candidates numerous because the median background estimate is tiny.
   - detection visualization plots for range-Doppler power, angle power, candidate mask, and sorted power distribution.
+  - learner asked where `config.processing` comes from; clarify that `config` is the `ExperimentConfig` created by `load_config(CONFIG_PATH)` in Step 2, and `.processing.detector` is parsed from the YAML `processing.detector` section.
+  - Step 6 wrap-up markdown cell summarizes detection as processed-cube cell classification plus index-to-physical-measurement conversion.
+- Step 7 introduces full experiment + tracking:
+  - `run_experiment(CONFIG_PATH)` as the top-level pipeline entrypoint;
+  - multiple `DwellTask`s over scan time, each producing processed dwells and detections;
+  - detections per dwell and final track summary;
+  - tracking formulation as cross-time association and state estimation;
+  - `Detection(range, radial_velocity, az, el, snr, time)` versus `Track(id, state_xyz_vxyz, covariance, status, hits, misses)`;
+  - note that the current toy tracker updates from Cartesian position only and does not directly use detection radial velocity in `_correct()`.
 
 ## Learner's Current Understanding
 
@@ -231,22 +242,66 @@ If a target is present in that range-Doppler cell, the peak magnitude/power over
 If no target is present in that range-Doppler cell, the az/el slice may still contain noise or sidelobes, but should not show a strong reliable peak above the detection threshold.
 ```
 
+## Detection Understanding
+
+The learner's current understanding:
+
+```text
+Detection is formulated as:
+
+given a processed radar cube, decide which cells correspond to target-like returns and which cells correspond to background.
+
+The core assumption is that cells containing a target should have larger power than background cells.
+```
+
+The learner also understands that the processed radar cube axes are already a physical parameter space:
+
+```text
+range axis    -> range_m
+Doppler axis  -> radial_velocity_mps
+az axis       -> az_deg
+el axis       -> el_deg
+```
+
+An accepted cube cell therefore becomes a measurement by mapping its index through `radar_cube.axes`. The power at that cell gives detection strength / SNR information.
+
+The learner understands `detect_radar_cube()` as a deliberately simple, heuristic detector:
+
+```text
+power cube
+-> estimate background power using the median of positive cells
+-> threshold by SNR
+-> collect candidate cells
+-> keep local maxima
+-> suppress nearby cells with guard-cell neighborhoods
+-> convert accepted cube indices into physical Detection objects
+```
+
+Important nuance:
+
+```text
+The current guard_cells implementation is mainly local-maximum / non-maximum suppression around accepted detections.
+It helps avoid reporting many adjacent cells from the same target response as separate detections.
+It is not a full CFAR-style training/guard-cell background estimator.
+```
+
+The learner also understands that this detector uses only one processed radar cube; temporal association or track-level evidence comes later in tracking. The detector is intentionally rule-based / heuristic, not a Bitter Lesson-style learned or scaled approach.
+
 ## Next Step
 
 Next teaching target:
 
 ```text
-Step 6: Detection
+Step 7: Full experiment + tracking
 ```
 
 Focus:
 
-- Review the newly added Step 6 cells with the learner.
-- Explain that detection operates on the processed radar cube after range, Doppler, and angle processing.
-- Connect detection to thresholding / finding significant peaks in radar-cube power.
-- Show how a cube index becomes a measurement with range, radial velocity, azimuth, and elevation axes.
-- Explain false alarms, noise/sidelobes, guard cells, and why a peak needs a threshold rather than just local maximum selection.
-- Use the new visualization cells to distinguish candidate cells from accepted detections.
+- Review the newly added Step 7 cells with the learner.
+- Connect `run_experiment()` to the lower-level functions already studied: `synthesize_dwell()`, `process_dwell()`, and `detect_radar_cube()`.
+- Explain how detections become structured measurements for tracking.
+- Explain `NearestNeighborTracker` conceptually as prediction, nearest-neighbor association, correction, new-track creation, and stale-track deletion.
+- Keep the first tracking pass conceptual before diving into line-by-line Kalman filter implementation details.
 
 ## Teaching Rules
 

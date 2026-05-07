@@ -1,3 +1,9 @@
+
+# 2026-05-07
+
+plan:
+- basic signal processing: detection and tracking part
+
 # 2026-05-06
 
 plan:
