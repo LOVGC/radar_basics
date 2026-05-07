@@ -127,6 +127,25 @@ Recent additions:
 
 ## Learner's Current Understanding
 
+The learner's current radar working mental model:
+
+```text
+transmitter
+-> sends a waveform / beam into space
+-> the waveform may or may not illuminate an object
+-> an illuminated object can reflect an echo
+-> receiver records the returned signal as raw IQ over one dwell / CPI
+-> signal processing extracts structured information from raw IQ
+-> detection reports target-like measurements
+```
+
+Important correction to preserve:
+
+```text
+One dwell first produces raw IQ data.
+The detector's direct input is not raw IQ, but the processed radar cube produced from that dwell.
+```
+
 The learner currently understands the main pipeline as:
 
 ```text
@@ -253,6 +272,20 @@ given a processed radar cube, decide which cells correspond to target-like retur
 
 The core assumption is that cells containing a target should have larger power than background cells.
 ```
+
+For the current tutorial pipeline, this means:
+
+```text
+one dwell of received raw IQ
+-> range compression
+-> Doppler processing
+-> angle beamforming
+-> processed radar cube
+-> detector
+-> detections
+```
+
+So the detector output is a set of detections from one processed dwell, not the full raw receive data itself.
 
 The learner also understands that the processed radar cube axes are already a physical parameter space:
 
