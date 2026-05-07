@@ -34,6 +34,7 @@ from radar_basics.core import (
 from radar_basics.data import ProcessedDwell, RadarCube, RawDwellAxes, RawDwellData, SimulationRunResult
 from radar_basics.detection import Detection, detect_radar_cube
 from radar_basics.experiment import run_experiment
+from radar_basics.geometry3d import plot_geometry_3d
 from radar_basics.processing import beamform_angle_grid, doppler_process, process_dwell, range_compress
 from radar_basics.radar import LfmPulseWaveform, RadarSystem, RectangularArray
 from radar_basics.scenario import PointTarget, Scene, TargetSnapshot
@@ -85,6 +86,7 @@ __all__ = [
     "load_config",
     "load_experiment_config",
     "parse_experiment_config",
+    "plot_geometry_3d",
     "power_to_db",
     "process_dwell",
     "radial_velocity_mps",
