@@ -1,3 +1,10 @@
+# 2026-05-08
+
+plan:
+- basic signal processing: tracking part
+- 下午，测角 part。
+	- 主要是做一个 problem formulation
+	- 然后尝试产生一些 simulation data, build a DNN model try 一下
 
 # 2026-05-07
 

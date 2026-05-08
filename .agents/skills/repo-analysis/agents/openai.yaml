@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repo Analysis"
+  short_description: "Concept, class graph, and call pipelines."
+  default_prompt: "Use $repo-analysis to explain this repository with a mental model, class containment graph, and function-call pipeline."
