@@ -76,10 +76,11 @@ learning/learn_coding_myself.ipynb
 Current status:
 
 ```text
-Completed through Step 6.
+Completed through Step 7.
 Step 5C Angle Beamforming has been reviewed and wrapped up by the learner.
 Step 6 Detection has been reviewed and wrapped up by the learner.
-Step 7 Full experiment + tracking has been added and is ready for learner review.
+Step 7 Full experiment + tracking has been reviewed and wrapped up by the learner.
+Step 8 Config dictionary experiments has been added and is ready for learner review.
 Tutorial example target has been changed to azimuth 5 deg, elevation 3 deg, radial velocity +10 m/s.
 ```
 
@@ -129,6 +130,16 @@ Recent additions:
     - uses plain lists/dicts plus NumPy in 2D with `state = [x, y, vx, vy]`;
     - demonstrates data association, state estimation, and track management step by step across five dwells;
     - target A persists, target B disappears and is deleted after too many misses.
+  - Step 7 tracking wrap-up markdown cell added with a four-level mental model:
+    - Level 1: connect detections into trajectories;
+    - Level 2: detections have no identity;
+    - Level 3: data association + state estimation + track management;
+    - Level 4: Bayesian inference over hidden trajectories from noisy detections.
+- Step 8 starts controlled experiment variations using Python config dictionaries:
+  - learner prefers direct edits to a copied config dictionary instead of editing YAML or dataclass fields;
+  - notebook now demonstrates `copy.deepcopy(raw_config)`, direct dictionary edit, `parse_experiment_config()`, and `run_experiment()`;
+  - first experiment changes only `scene.targets[0].range_m` from 1500 m to 1800 m;
+  - output compares truth range, first detection range, and final track range.
 
 ## Learner's Current Understanding
 
@@ -386,21 +397,41 @@ The learner is clarifying tracking as three linked problems:
 
 Step 7 now includes a minimal from-scratch example to make these three problems visible without relying on the existing tracker implementation or heavy abstraction layers.
 
+The learner has wrapped up Step 7 with a four-level tracking mental model:
+
+```text
+Level 1:
+  Tracking is connecting target-like points over time into trajectories.
+
+Level 2:
+  The hard part is that detections do not carry identity.
+  A detection is only a measurement like (position, time), and the tracker must infer who it belongs to.
+
+Level 3:
+  Engineering decomposition:
+  data association + state estimation + track lifecycle management.
+  Association and estimation are coupled: better state estimates improve association, and better association improves state estimates.
+
+Level 4:
+  Abstract mathematical view:
+  tracking is Bayesian inference over hidden target trajectories from noisy, false-alarm-prone, missed-detection-prone observations.
+  Motion model is the prior; measurement model is the likelihood.
+```
+
 ## Next Step
 
 Next teaching target:
 
 ```text
-Step 7: Full experiment + tracking
+Step 8: Experiment variations
 ```
 
 Focus:
 
-- Review the newly added Step 7 cells with the learner.
-- Connect `run_experiment()` to the lower-level functions already studied: `synthesize_dwell()`, `process_dwell()`, and `detect_radar_cube()`.
-- Explain how detections become structured measurements for tracking.
-- Explain `NearestNeighborTracker` conceptually as prediction, nearest-neighbor association, correction, new-track creation, and stale-track deletion.
-- Keep the first tracking pass conceptual before diving into line-by-line Kalman filter implementation details.
+- Review the new dictionary-based Step 8 cells.
+- Use small controlled config dictionary changes to test the learner's mental models.
+- Start with target range variation, then add velocity, angle, SNR/noise, scan schedule, detector threshold, and tracker gate variations one at a time.
+- Keep connecting observed outputs back to the radar pipeline: raw IQ -> processed cube -> detections -> tracks.
 
 ## Teaching Rules
 
