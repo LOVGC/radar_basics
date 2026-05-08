@@ -124,6 +124,11 @@ Recent additions:
   - tracking formulation as cross-time association and state estimation;
   - `Detection(range, radial_velocity, az, el, snr, time)` versus `Track(id, state_xyz_vxyz, covariance, status, hits, misses)`;
   - note that the current toy tracker updates from Cartesian position only and does not directly use detection radial velocity in `_correct()`.
+  - from-scratch minimal two-target tracking example added under Step 7:
+    - intentionally does not use `NearestNeighborTracker`, `Track`, `Detection`, or `TrackerConfig`;
+    - uses plain lists/dicts plus NumPy in 2D with `state = [x, y, vx, vy]`;
+    - demonstrates data association, state estimation, and track management step by step across five dwells;
+    - target A persists, target B disappears and is deleted after too many misses.
 
 ## Learner's Current Understanding
 
@@ -319,6 +324,67 @@ It is not a full CFAR-style training/guard-cell background estimator.
 ```
 
 The learner also understands that this detector uses only one processed radar cube; temporal association or track-level evidence comes later in tracking. The detector is intentionally rule-based / heuristic, not a Bitter Lesson-style learned or scaled approach.
+
+## Tracking Understanding
+
+The learner's current conceptual intuition:
+
+```text
+A track can be viewed as a sequence/history of detections that are believed to belong to the same target.
+```
+
+Important implementation distinction in this project:
+
+```text
+The `Track` dataclass does not store the full list of associated detections.
+It stores a filtered state estimate plus uncertainty and lifecycle counters.
+```
+
+Current `Track` state representation:
+
+```text
+state_xyz_vxyz.shape = (6,)
+state_xyz_vxyz = [x, y, z, vx, vy, vz]
+
+covariance.shape = (6, 6)
+```
+
+Mental model to preserve:
+
+```text
+Detection history view:
+  raw evidence over time
+  [detection_1, detection_2, detection_3, ...]
+
+State-estimation view used by this code:
+  compressed belief about the target
+  [x, y, z, vx, vy, vz] + covariance + status/hits/misses
+```
+
+So in future teaching, distinguish:
+
+```text
+tracking association problem:
+  decide which detections belong to the same target
+
+track object in this implementation:
+  current estimated target state, not the complete detection history
+```
+
+The learner is clarifying tracking as three linked problems:
+
+```text
+1. Data association:
+   Which detections belong to the same physical target?
+
+2. State estimation:
+   What is each target's current state, e.g. position and velocity?
+
+3. Track management:
+   When should a track be created, confirmed, marked missed, or deleted?
+```
+
+Step 7 now includes a minimal from-scratch example to make these three problems visible without relying on the existing tracker implementation or heavy abstraction layers.
 
 ## Next Step
 
